@@ -1,3 +1,6 @@
+<?php
+    $dailyVisitorCounts = $this->get_daily_visitor_count();
+?>
 <style>
     .doremon-counter-main-container{
         padding: 20px 0;
@@ -58,8 +61,11 @@
                     Today Visitor
                 </span>
                 <span>
-                    <?php foreach(($this->get_daily_visitor_count()) as $today_visitor)
-                        echo $today_visitor['visitor_count'];
+                    <?php
+                        if(!empty($dailyVisitorCounts)){
+                            $todayVisitor = end($dailyVisitorCounts)['visitor_count'];
+                            echo $todayVisitor;
+                        }
                     ?>
                 </span>
             </h1>
@@ -86,10 +92,10 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach(($this->get_daily_visitor_count()) as $daily_count):?>
+                <?php foreach($dailyVisitorCounts as $dailyCount):?>
                     <tr>
-                        <td><?=$daily_count['date'];?></td>
-                        <td><?=$daily_count['visitor_count'];?></td>
+                        <td><?=$dailyCount['date'];?></td>
+                        <td><?=$dailyCount['visitor_count'];?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

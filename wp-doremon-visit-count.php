@@ -43,6 +43,15 @@ class DoremonVisitorCount{
                 'visitor_count'=> $dailyCounts[$today]
             );
         }
+        foreach($dailyCounts as $date=>$count){
+            if($date === $today){
+                continue;
+            }
+            $totalDayCounts [] = array(
+                'date' => $date,
+                'visitor_count'=>$count
+            );
+        }
         return $totalDayCounts;
     } 
 
