@@ -165,6 +165,11 @@
         </div>
     </div>
     <div id="chartContainer"></div>
+    <div>
+        <?php
+            echo $this->title_table_content();
+        ?>
+    </div>
 </div>
 <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
 
