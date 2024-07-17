@@ -11,7 +11,6 @@ class DoremonVisitorCount{
         add_action( 'wp', array($this, 'increment_visitor_count'));
         add_action('wp', array($this, 'track_page_visitor'));
         add_action( 'admin_menu', array($this, 'add_visitor_menu_page'));
-        add_action('wp_dashboard_setup', array($this, 'title_table_content'));
     }
     // Function to increment visitor count
     public function increment_visitor_count() {
@@ -57,6 +56,7 @@ class DoremonVisitorCount{
         return $totalDayCounts;
     } 
 
+    //allow to count single page view
     public function track_page_visitor(){
         if(is_singular()){
             global $post;
@@ -95,23 +95,31 @@ class DoremonVisitorCount{
 
         if ($query->have_posts()) {
             $count = 0;
-            echo '<table style="width:100%; border-collapse: collapse;"> 
+            ?>
+                <table style="width:100%; border-collapse: collapse;"> 
                     <thead> 
                         <th>Sl</th>
                         <th>Title</th>
                         <th>visitor</th>
                     </thead>
-                    <tbody>';
+                    <tbody>
+            <?php
                     while ($query->have_posts()) {
                         $query->the_post();
                         ++$count;
                         $visitor_count = $this->display_page_visitor();
-                        echo '<tr>
-                                <td>'.$count. '</td>';
-                        echo '<td>'. get_the_title() .'</td>';
-                        echo '<td>'. $visitor_count.'</td></tr>';
+                        ?>
+                            <tr>
+                                <td><?=$count ?></td>
+                                <td><?=get_the_title()?></td>
+                                <td><?=$visitor_count?></td>
+                            </tr>
+                        <?php
                     }
-            echo '</tbody></table>';
+                    ?>
+                    </tbody>
+            </table>
+            <?php
             wp_reset_postdata();  // Restore original post data
         } else {
             echo 'No posts/pages found.';
