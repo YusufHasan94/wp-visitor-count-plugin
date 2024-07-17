@@ -110,15 +110,15 @@ class DoremonVisitorCount{
                         $visitor_count = $this->display_page_visitor();
                         ?>
                             <tr>
-                                <td><?=$count ?></td>
+                                <td style="text-align:center;"><?=$count ?></td>
                                 <td><?=get_the_title()?></td>
-                                <td><?=$visitor_count?></td>
+                                <td style="text-align:center;"><?=$visitor_count?></td>
                             </tr>
                         <?php
                     }
                     ?>
                     </tbody>
-            </table>
+                </table>
             <?php
             wp_reset_postdata();  // Restore original post data
         } else {
@@ -130,18 +130,31 @@ class DoremonVisitorCount{
     // Function to add menu page
     public function add_visitor_menu_page() {
         add_menu_page(
-            'Doremon Visitor Count',                         // Page title
-            'Doremon Visitor Count',                         // Menu title
-            'manage_options',                                // Capability required to access
-            'doremon-visitor-count',                         // Menu slug
-            array($this,'display_visitor_menu_page'),        // Callback function to display page content
-            'dashicons-chart-bar',                           // Icon (optional)
+            __('Doremon View Count', 'doremon-visitor-count'),              // Page title
+            __('Doremon View Count', 'doremon-visitor-count'),              // Menu title
+            'manage_options',                                               // Capability required to access
+            'doremon_view_count_menu',                                      // Menu slug
+            array($this,'display_visitor_general_page'),                    // Callback function to display page content
+            'dashicons-chart-bar',                                          // Icon (optional)
+            4                                                               //priority    
+        );
+        add_submenu_page(
+            'doremon_view_count_menu',                                       // parent slug
+            __('Single page view', 'doremon-visitor-count'),                 // Page title
+            __('Single page view', 'doremon-visitor-count'),                 // Menu title
+            'manage_options',                                                // Capability required to access
+            'single_page_view',                                              // Menu slug
+            array($this,'display_singular_view_page'),                       // Callback function to display page content
         );
     }
     // Callback function to display menu page content
-    public function display_visitor_menu_page() {
+    public function display_visitor_general_page() {
         require "page.view.php";
     }
+    public function display_singular_view_page() {
+        require "singlepage.view.php";
+    }
+
 }
 
 $doremonvisitor = new DoremonVisitorCount();

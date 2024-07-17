@@ -82,7 +82,7 @@
             exportEnabled: true,
             theme: "light2", // "light1", "light2", "dark1", "dark2"
             title:{
-                text: "Visitor Statistics"
+                text: "Statistics"
             },
             axisX:{
                 title: "Date",
@@ -104,16 +104,16 @@
 </script>
 
 
-<div>
+<div class="doremon-page-view-counter-main">
     <h1>
-        Doremon Visitor counter
+        Doremon View counter
     </h1>
     <div class="doremon-counter-main-container">
         <div class="doremon-counter-label-container">
             <div class="doremon-counter-container doremon-counter-today-visitor">
                 <h1>
                     <span>
-                        Today Visitor
+                        Today View
                     </span>
                     <span>
                         <?php
@@ -136,7 +136,7 @@
             <div class="doremon-counter-container doremon-counter-total-visitor">
                 <h1>
                     <span>
-                        Total Visitor
+                        Total View
                     </span>
                     <span>
                         <?= $this->get_total_visitor_count(); ?>
@@ -145,7 +145,7 @@
             </div>
         </div>
         <div class="doremon-counter-table-container">
-            <h1>visitor Table</h1>
+            <h1>Website View Table</h1>
             <table>
                 <thead>
                     <tr>
@@ -165,11 +165,6 @@
         </div>
     </div>
     <div id="chartContainer"></div>
-    <div>
-        <?php
-            echo $this->title_table_content();
-        ?>
-    </div>
 </div>
 <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
 
