@@ -12,10 +12,13 @@
 
 ?>
 <style>
+    .doremon-page-view-counter-main{
+        margin: 50px 50px 50px 10px;
+    }
     .doremon-counter-main-container{
         display: flex;
         justify-content: space-between;
-        margin: 0 50px;
+        margin-left: 10px;
     }
     .doremon-counter-label-container{
         width: 50%;
@@ -66,7 +69,7 @@
         text-align: center;
     }
     #chartContainer{
-        margin: 50px 100px 100px 100px;
+        margin: 50px 0 0 10px;
         min-height: 400px;
     }
     .canvasjs-chart-credit{
