@@ -3,12 +3,17 @@
     $dataPoints = array();
 
     foreach($dailyVisitorCounts  as $count){
-        $date = strtotime($count['date'])*1000;
         $dataPoints[] = array(
-            "x" => $date, 
+            "x" => strtotime($count['date'])*1000, 
             "y" => $count['visitor_count']
         );
-    }
+    };
+
+    usort($dataPoints, function($a, $b){
+        return $b['x'] - $a['x'];
+    });
+
+    $sortedDataPoints = $dataPoints; 
 
 ?>
 <style>
@@ -157,10 +162,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($dailyVisitorCounts as $dailyCount):?>
+                    <?php foreach($sortedDataPoints as $dataPoint):
+                        $date = date('Y-m-d', $dataPoint['x'] / 1000);?>
                         <tr>
-                            <td><?=$dailyCount['date'];?></td>
-                            <td><?=$dailyCount['visitor_count'];?></td>
+                            <td><?=$date?></td>
+                            <td><?=$dataPoint['y'];?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -170,5 +176,3 @@
     <div id="chartContainer"></div>
 </div>
 <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
-
-

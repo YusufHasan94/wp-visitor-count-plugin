@@ -95,31 +95,18 @@ class DoremonVisitorCount{
 
         if ($query->have_posts()) {
             $count = 0;
-            ?>
-                <table style="width:100%; border-collapse: collapse;"> 
-                    <thead> 
-                        <th>Sl</th>
-                        <th>Title</th>
-                        <th>visitor</th>
-                    </thead>
-                    <tbody>
-            <?php
-                    while ($query->have_posts()) {
-                        $query->the_post();
-                        ++$count;
-                        $visitor_count = $this->display_page_visitor();
-                        ?>
-                            <tr>
-                                <td style="text-align:center;"><?=$count ?></td>
-                                <td><?=get_the_title()?></td>
-                                <td style="text-align:center;"><?=$visitor_count?></td>
-                            </tr>
-                        <?php
-                    }
+                while ($query->have_posts()) {
+                    $query->the_post();
+                    ++$count;
+                    $visitor_count = $this->display_page_visitor();
                     ?>
-                    </tbody>
-                </table>
-            <?php
+                        <tr>
+                            <td style="text-align:center;"><?=$count ?></td>
+                            <td><?=get_the_title()?></td>
+                            <td style="text-align:center;"><?=$visitor_count?></td>
+                        </tr>
+                    <?php
+                }
             wp_reset_postdata();  // Restore original post data
         } else {
             echo 'No posts/pages found.';
