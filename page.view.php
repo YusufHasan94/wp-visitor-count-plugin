@@ -130,7 +130,13 @@
                                 $todayVisitor = array_search($date, array_column($dailyVisitorCounts, 'date'));
                                 if($todayVisitor !== false){
                                     $todayVisitor = $dailyVisitorCounts[$todayVisitor]['visitor_count'];
-                                    echo $todayVisitor;
+                                    if(is_array($todayVisitor)){
+                                        $todayVisitor = implode(", ", $todayVisitor);
+                                        echo $todayVisitor;
+                                    }
+                                    else{
+                                        echo $todayVisitor;
+                                    }
                                 }else{
                                     $todayVisitor = 0;
                                     echo $todayVisitor;
@@ -166,7 +172,17 @@
                         $date = date('Y-m-d', $dataPoint['x'] / 1000);?>
                         <tr>
                             <td><?=$date?></td>
-                            <td><?=$dataPoint['y'];?></td>
+                            <td>
+                                <?php
+                                    if(is_array($dataPoint['y'])){
+                                        $dataPoint['y'] = implode(", ", $dataPoint['y']);
+                                        echo $dataPoint['y'];
+                                    }
+                                    else{
+                                        echo $dataPoint['y'];
+                                    }
+                                ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

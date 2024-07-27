@@ -21,7 +21,7 @@ class DoremonVisitorCount{
             $today = date('Y-m-d');
             $dailyCounts = get_option('daily_visitor_counts', array());
             if(isset($dailyCounts[$today])){
-                $dailyCounts[$today]++;
+                $dailyCounts[$today] = (int)$dailyCounts[$today]++;
             }else{
                 $dailyCounts[$today] = 1;
             }
