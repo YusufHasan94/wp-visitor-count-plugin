@@ -13,11 +13,14 @@ class DoremonviewCount{
         add_action( 'admin_menu', array($this, 'add_view_menu_page'));
     
         add_filter('manage_pages_columns', array($this, 'add_viewcount_page_column'));
-        add_action('manage_pages_custom_column', array($this, 'populate_viewcount_page_column'), 20, 2);
+        add_action('manage_pages_custom_column', array($this, 'populate_viewcount_page_column'), 10, 2);
+        
+        add_action('manage_pages_columns', array($this, 'show_view_count_switch'));
+        add_action('manage_pages_custom_column', array($this, 'populate_show_view_count_switch'), 10, 2);
         
         add_filter('manage_posts_columns', array($this, 'add_viewcount_post_column'));
         add_action('manage_posts_custom_column', array($this, 'populate_viewcount_post_column'), 10, 2);
-
+        
     }
 
     // increment view count
@@ -137,6 +140,19 @@ class DoremonviewCount{
             echo $count?$count:0;
         }
     }
+
+    public function show_view_count_switch($columns){
+        $columns['toggle_option'] = __('show view count', 'doremon-view-count');
+        return $columns;
+    }
+
+    public function populate_show_view_count_switch($column,$post_id){
+        if($column === 'toggle_option'){
+            $show_view_count = get_post_meta($post_id, 'page_visits', true);
+            $checked = $show_view_count ? 'checked' : '';
+            echo '<input type="checkbox" name="show-view-count" data-post-id="'.$post_id.'" '.$checked. '/>';
+        }
+    }
     
     // adding view count column at posts page.
     public function add_viewcount_post_column($columns){
@@ -157,19 +173,19 @@ class DoremonviewCount{
         add_menu_page(
             __('Doremon View Count', 'doremon-view-count'),              // Page title
             __('Doremon View Count', 'doremon-view-count'),              // Menu title
-            'manage_options',                                               // Capability required to access
-            'doremon_view_count_menu',                                      // Menu slug
+            'manage_options',                                            // Capability required to access
+            'doremon_view_count_menu',                                   // Menu slug
             array($this,'display_view_general_page'),                    // Callback function to display page content
-            'dashicons-chart-bar',                                          // Icon (optional)
-            4                                                               //priority    
+            'dashicons-chart-bar',                                       // Icon (optional)
+            4                                                            //priority    
         );
         add_submenu_page(
-            'doremon_view_count_menu',                                       // parent slug
+            'doremon_view_count_menu',                                    // parent slug
             __('Single page view', 'doremon-view-count'),                 // Page title
             __('Single page view', 'doremon-view-count'),                 // Menu title
-            'manage_options',                                                // Capability required to access
-            'single_page_view',                                              // Menu slug
-            array($this,'display_singular_view_page'),                       // Callback function to display page content
+            'manage_options',                                             // Capability required to access
+            'single_page_view',                                           // Menu slug
+            array($this,'display_singular_view_page'),                    // Callback function to display page content
         );
     }
     // Callback function to display menu page content
