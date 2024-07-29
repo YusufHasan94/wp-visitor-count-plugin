@@ -1,5 +1,5 @@
 <?php
-    $dailyVisitorCounts = $this->get_daily_visitor_count();
+    $dailyVisitorCounts = $this->get_daily_view_count();
     $dataPoints = array();
 
     foreach($dailyVisitorCounts  as $count){
@@ -153,7 +153,7 @@
                         Total View
                     </span>
                     <span>
-                        <?= $this->get_total_visitor_count(); ?>
+                        <?= $this->get_total_view_count(); ?>
                     </span>
                 </h1>
             </div>

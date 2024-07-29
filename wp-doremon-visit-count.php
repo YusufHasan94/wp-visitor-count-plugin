@@ -23,34 +23,34 @@ class DoremonviewCount{
     // increment view count
     public function increment_view_count() {
         if ( ! is_admin() ) {
-            $count = get_option( 'view_count', 0 );
-            update_option( 'view_count', ++$count );
+            $count = get_option( 'visitor_count', 0 );
+            update_option( 'visitor_count', ++$count );
 
             $today = date('Y-m-d');
-            $dailyCounts = get_option('daily_view_counts', array());
+            $dailyCounts = get_option('daily_visitor_counts', array());
             if(isset($dailyCounts[$today])){
-                $dailyCounts[$today] = (int)$dailyCounts[$today]++;
+               $dailyCounts[$today]++;
             }else{
                 $dailyCounts[$today] = 1;
             }
-            update_option('daily_view_counts', $dailyCounts);
+            update_option('daily_visitor_counts', $dailyCounts);
         }
     }
     // display view count
     public function get_total_view_count() {
-        $count = get_option( 'view_count', 0 );
+        $count = get_option( 'visitor_count', 0 );
         return $count;
     }
 
     // fetching daily view count
     public function get_daily_view_count(){
-        $dailyCounts = get_option('daily_view_counts', array());
+        $dailyCounts = get_option('daily_visitor_counts', array());
         $today = date('Y-m-d');
         $totalDayCounts = array();
         if(isset($dailyCounts[$today])){
             $totalDayCounts[] = array(
                 'date'=> $today,
-                'view_count'=> $dailyCounts[$today]
+                'visitor_count'=> $dailyCounts[$today]
             );
         }
         foreach($dailyCounts as $date=>$count){
@@ -59,7 +59,7 @@ class DoremonviewCount{
             }
             $totalDayCounts [] = array(
                 'date' => $date,
-                'view_count'=>$count
+                'visitor_count'=>$count
             );
         }
         return $totalDayCounts;
@@ -126,13 +126,13 @@ class DoremonviewCount{
 
     // adding view count column at pages page. 
     public function add_viewcount_page_column($columns){
-        $columns['view_count'] = __('view count', 'doremon-view-count');
+        $columns['visitor_count'] = __('view count', 'doremon-view-count');
         return $columns;
     }  
 
     // display view count for each page
     public function populate_viewcount_page_column($column,$post_id){
-        if($column == 'view_count'){
+        if($column == 'visitor_count'){
             $count = get_post_meta($post_id, 'page_visits', true);
             echo $count?$count:0;
         }
@@ -140,13 +140,13 @@ class DoremonviewCount{
     
     // adding view count column at posts page.
     public function add_viewcount_post_column($columns){
-        $columns['view_count'] = __('view count', 'doremon-view-count');
+        $columns['visitor_count'] = __('view count', 'doremon-view-count');
         return $columns;
     }  
 
     // display view count for each post
     public function populate_viewcount_post_column($column, $post_id){
-        if($column == 'view_count'){
+        if($column == 'visitor_count'){
             $count = get_post_meta($post_id, 'page_visits', true);
             echo $count? $count:0;
         }
