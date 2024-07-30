@@ -15,6 +15,8 @@
 
     $sortedDataPoints = $dataPoints; 
 
+
+
 ?>
 <style>
     .doremon-page-view-counter-main{
@@ -79,6 +81,40 @@
     }
     .canvasjs-chart-credit{
         display: none!important;
+    }
+    .changeSettings{
+        margin: 20px 0 20px 20px; 
+        display: flex; 
+        justify-content: end;
+    }
+    .changeSettings form{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        border: 0.5px solid gray;
+        border-radius: 5px;
+        padding: 10px; 
+        background: white;
+        font-size: 16px;
+    }
+    .changeSettings form div{
+        display: flex;
+        flex-direction: column;
+        gap: 10px; 
+    }
+    .changeSettings form div div{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+    }
+    .submitChanges{
+        width: fit-content;
+        background-color: #29527B;
+        color: white;
+        padding: 4px;
+        border-radius: 5px; 
     }
 </style>
 
@@ -190,5 +226,28 @@
         </div>
     </div>
     <div id="chartContainer"></div>
+    <div class="changeSettings">
+        <form action="" method="POST">
+            <div>
+                <div>
+                    <input type="checkbox" name="handlePagesTitleCheckbox" id="">
+                    <label for="handlePagesTitleCheckbox">show view count after pages title</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="handlePostsTitleCheckbox" id="">
+                    <label for="handlePostsTitleCheckbox">show view count after posts title</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="handlePagesCheckbox" id="" <?php echo $pagesChecked ?>>
+                    <label for="handlePagesCheckbox">show view count at pages list</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="handlePostsCheckbox" id="" <?php echo $postsChecked ?>>
+                    <label for="handlePostsCheckbox">show view count at posts list</label>
+                </div>
+            </div>
+            <input type="submit" value="Save Changes" name="submit" class="submitChanges">
+        </form>
+    </div>
 </div>
 <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>

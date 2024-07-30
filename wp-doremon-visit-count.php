@@ -11,16 +11,20 @@ class DoremonviewCount{
         add_action( 'wp', array($this, 'increment_view_count'));
         add_action('wp', array($this, 'track_page_view'));
         add_action( 'admin_menu', array($this, 'add_view_menu_page'));
-    
+            
+        add_action('init', array($this, 'handle_pages_request'));
+        add_action('init', array($this, 'handle_posts_request'));
+        
+    }
+
+    public function handle_pages_request(){
         add_filter('manage_pages_columns', array($this, 'add_viewcount_page_column'));
-        add_action('manage_pages_custom_column', array($this, 'populate_viewcount_page_column'), 10, 2);
-        
-        add_action('manage_pages_columns', array($this, 'show_view_count_switch'));
-        add_action('manage_pages_custom_column', array($this, 'populate_show_view_count_switch'), 10, 2);
-        
+        add_action('manage_pages_custom_column', array($this, 'populate_viewcount_page_column'), 10, 2);  
+    }
+
+    public function handle_posts_request(){
         add_filter('manage_posts_columns', array($this, 'add_viewcount_post_column'));
         add_action('manage_posts_custom_column', array($this, 'populate_viewcount_post_column'), 10, 2);
-        
     }
 
     // increment view count
@@ -140,19 +144,6 @@ class DoremonviewCount{
             echo $count?$count:0;
         }
     }
-
-    public function show_view_count_switch($columns){
-        $columns['toggle_option'] = __('show view count', 'doremon-view-count');
-        return $columns;
-    }
-
-    public function populate_show_view_count_switch($column,$post_id){
-        if($column === 'toggle_option'){
-            $show_view_count = get_post_meta($post_id, 'page_visits', true);
-            $checked = $show_view_count ? 'checked' : '';
-            echo '<input type="checkbox" name="show-view-count" data-post-id="'.$post_id.'" '.$checked. '/>';
-        }
-    }
     
     // adding view count column at posts page.
     public function add_viewcount_post_column($columns){
@@ -166,7 +157,7 @@ class DoremonviewCount{
             $count = get_post_meta($post_id, 'page_visits', true);
             echo $count? $count:0;
         }
-    }
+    }  
 
     // Function to add menu page
     public function add_view_menu_page() {
@@ -188,10 +179,37 @@ class DoremonviewCount{
             array($this,'display_singular_view_page'),                    // Callback function to display page content
         );
     }
+
     // Callback function to display menu page content
     public function display_view_general_page() {
-        require "page.view.php";
+        $pagesChecked = "";
+        $postsChecked = "";
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if (isset($_POST['submit'])) {
+                if (isset($_POST['handlePagesCheckbox'])) {
+                    echo "<br>tring to visible<br>";
+                    $pagesChecked = "checked";
+                    // add_action('init', array($this, 'handle_pages_request'));
+                } else {
+                    echo "not checked<br>";
+                    
+                }
+                
+                if (isset($_POST['handlePostsCheckbox'])) {
+                    echo "<br>tring to visible on posts<br>";
+                    $postsChecked = "checked";
+                    // $this->handle_post_request();
+                } else {
+                    echo "posts not checked<br>";
+                    
+                }
+                
+            }
+        }
+        require "page.view.php"; 
     }
+
     //callback function to display single page view content
     public function display_singular_view_page() {
         require "singlepage.view.php";
