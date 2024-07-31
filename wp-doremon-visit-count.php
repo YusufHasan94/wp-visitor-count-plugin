@@ -11,18 +11,29 @@ class DoremonviewCount{
         add_action( 'wp', array($this, 'increment_view_count'));
         add_action('wp', array($this, 'track_page_view'));
         add_action( 'admin_menu', array($this, 'add_view_menu_page'));
-            
-        add_action('init', array($this, 'handle_pages_request'));
-        add_action('init', array($this, 'handle_posts_request'));
+        add_action('init', array($this, 'handle_settings_changes'));
         
     }
 
-    public function handle_pages_request(){
-        add_filter('manage_pages_columns', array($this, 'add_viewcount_page_column'));
-        add_action('manage_pages_custom_column', array($this, 'populate_viewcount_page_column'), 10, 2);  
+    public function handle_settings_changes() {
+        $showPages = get_option('doremon_show_pages_view_count', false);
+        $showPosts = get_option('doremon_show_posts_view_count', false);
+
+        if ($showPages) {
+            $this->handle_pages_request();
+        }
+
+        if ($showPosts) {
+            $this->handle_posts_request();
+        }
     }
 
-    public function handle_posts_request(){
+    public function handle_pages_request() {
+        add_filter('manage_pages_columns', array($this, 'add_viewcount_page_column'));
+        add_action('manage_pages_custom_column', array($this, 'populate_viewcount_page_column'), 10, 2);
+    }
+
+    public function handle_posts_request() {
         add_filter('manage_posts_columns', array($this, 'add_viewcount_post_column'));
         add_action('manage_posts_custom_column', array($this, 'populate_viewcount_post_column'), 10, 2);
     }
@@ -159,6 +170,17 @@ class DoremonviewCount{
         }
     }  
 
+    //handle settings changes
+
+    public function save_settings_changes() {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if (isset($_POST['submit'])) {
+                update_option('doremon_show_pages_view_count', isset($_POST['handlePagesCheckbox']) ? true : false);
+                update_option('doremon_show_posts_view_count', isset($_POST['handlePostsCheckbox']) ? true : false);
+            }
+        }
+    }
+
     // Function to add menu page
     public function add_view_menu_page() {
         add_menu_page(
@@ -182,31 +204,11 @@ class DoremonviewCount{
 
     // Callback function to display menu page content
     public function display_view_general_page() {
-        $pagesChecked = "";
-        $postsChecked = "";
+        $this->save_settings_changes();
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if (isset($_POST['submit'])) {
-                if (isset($_POST['handlePagesCheckbox'])) {
-                    echo "<br>tring to visible<br>";
-                    $pagesChecked = "checked";
-                    // add_action('init', array($this, 'handle_pages_request'));
-                } else {
-                    echo "not checked<br>";
-                    
-                }
-                
-                if (isset($_POST['handlePostsCheckbox'])) {
-                    echo "<br>tring to visible on posts<br>";
-                    $postsChecked = "checked";
-                    // $this->handle_post_request();
-                } else {
-                    echo "posts not checked<br>";
-                    
-                }
-                
-            }
-        }
+        $pagesChecked = get_option('doremon_show_pages_view_count', false) ? "checked" : "";
+        $postsChecked = get_option('doremon_show_posts_view_count', false) ? "checked" : "";
+         
         require "page.view.php"; 
     }
 
