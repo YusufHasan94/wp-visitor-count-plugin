@@ -12,12 +12,15 @@ class DoremonviewCount{
         add_action('wp', array($this, 'track_page_view'));
         add_action( 'admin_menu', array($this, 'add_view_menu_page'));
         add_action('init', array($this, 'handle_settings_changes'));
-        
+        // add_filter('the_title', array($this, 'display_view_count_with_title'), 10, 2);
     }
 
     public function handle_settings_changes() {
         $showPages = get_option('doremon_show_pages_view_count', false);
         $showPosts = get_option('doremon_show_posts_view_count', false);
+        
+        $showCountWithTitleInPages = get_option('display_view_count_pages_with_title', false);
+        $showCountWithTitleInPosts = get_option('display_view_count_posts_with_title', false);
 
         if ($showPages) {
             $this->handle_pages_request();
@@ -25,6 +28,12 @@ class DoremonviewCount{
 
         if ($showPosts) {
             $this->handle_posts_request();
+        }
+        if($showCountWithTitleInPages){
+            $this->handle_show_count_pages_with_title();
+        }
+        if($showCountWithTitleInPosts){
+            $this->handle_show_count_posts_with_title();
         }
     }
 
@@ -36,6 +45,14 @@ class DoremonviewCount{
     public function handle_posts_request() {
         add_filter('manage_posts_columns', array($this, 'add_viewcount_post_column'));
         add_action('manage_posts_custom_column', array($this, 'populate_viewcount_post_column'), 10, 2);
+    }
+
+    public function handle_show_count_pages_with_title(){
+        add_filter('the_title', array($this, 'display_view_count_pages_with_title'), 10, 2);
+    }
+
+    public function handle_show_count_posts_with_title(){
+        add_filter('the_title', array($this, 'display_view_count_posts_with_title'), 10, 2);
     }
 
     // increment view count
@@ -142,6 +159,35 @@ class DoremonviewCount{
         }
     }
 
+    // show view count after title
+    public function display_view_count_pages_with_title($title, $id=null){
+        if(is_singular('page')){
+            if(!$id){
+                global $post;
+                $id = $post->ID;
+            }
+            $view = get_post_meta($id, 'page_visits', true);
+            if($view){
+                $title =  $title . " [view count ". $view."]";
+            }
+        }
+        return $title;
+    }
+    
+    public function display_view_count_posts_with_title($title, $id=null){
+        if(is_singular('post')){
+            if(!$id){
+                global $post;
+                $id = $post->ID;
+            }
+            $view = get_post_meta($id, 'page_visits', true);
+            if($view){
+                $title =  $title . " [view count ". $view."]";
+            }
+        }
+        return $title;
+    }
+
     // adding view count column at pages page. 
     public function add_viewcount_page_column($columns){
         $columns['visitor_count'] = __('view count', 'doremon-view-count');
@@ -177,6 +223,8 @@ class DoremonviewCount{
             if (isset($_POST['submit'])) {
                 update_option('doremon_show_pages_view_count', isset($_POST['handlePagesCheckbox']) ? true : false);
                 update_option('doremon_show_posts_view_count', isset($_POST['handlePostsCheckbox']) ? true : false);
+                update_option('display_view_count_pages_with_title', isset($_POST['handlePagesTitleCheckbox']) ? true : false);
+                update_option('display_view_count_posts_with_title', isset($_POST['handlePostsTitleCheckbox']) ? true : false);
             }
         }
     }
@@ -208,6 +256,8 @@ class DoremonviewCount{
 
         $pagesChecked = get_option('doremon_show_pages_view_count', false) ? "checked" : "";
         $postsChecked = get_option('doremon_show_posts_view_count', false) ? "checked" : "";
+        $pagesTitleChecked = get_option('display_view_count_pages_with_title', false) ? "checked" : "";
+        $postsTitleChecked = get_option('display_view_count_posts_with_title', false) ? "checked" : "";
          
         require "page.view.php"; 
     }

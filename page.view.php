@@ -230,11 +230,11 @@
         <form action="" method="POST">
             <div>
                 <div>
-                    <input type="checkbox" name="handlePagesTitleCheckbox" id="">
+                    <input type="checkbox" name="handlePagesTitleCheckbox" id="" <?php echo $pagesTitleChecked ?>>
                     <label for="handlePagesTitleCheckbox">show view count after pages title</label>
                 </div>
                 <div>
-                    <input type="checkbox" name="handlePostsTitleCheckbox" id="">
+                    <input type="checkbox" name="handlePostsTitleCheckbox" id="" <?php echo $postsTitleChecked ?> >
                     <label for="handlePostsTitleCheckbox">show view count after posts title</label>
                 </div>
                 <div>
