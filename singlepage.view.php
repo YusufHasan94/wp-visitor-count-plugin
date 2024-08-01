@@ -13,7 +13,7 @@
 
 <div class="singlepage-main-container">
     <h1 style="text-align:center;">
-        Single Page view count
+        Single Page View Count
     </h1>
     <div>
         <table style="width:100%; border-collapse: collapse;"> 

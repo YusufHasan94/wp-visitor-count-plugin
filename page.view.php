@@ -104,13 +104,18 @@
     .changeSettings form{
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        align-items: flex-start;
         gap: 10px;
         border: 0.5px solid gray;
         border-radius: 5px;
-        padding: 10px; 
+        padding: 15px 20px; 
         background: white;
         font-size: 16px;
+    }
+    .changeSettings form h1{
+        text-transform: capitalize;
+        font-size: 22px;
+        font-weight: 500;
     }
     .changeSettings form div{
         display: flex;
@@ -122,6 +127,15 @@
         flex-direction: row;
         align-items: center;
 
+    }
+    .changeSettings label{
+        text-transform: capitalize; 
+    }
+    .changeSettings .submitBtnContainer{
+        width: 100%;
+        display: flex;
+        align-items: flex-end;
+        margin-top: 10px;
     }
     .submitChanges{
         width: fit-content;
@@ -164,30 +178,39 @@
 
 <div class="doremon-page-view-counter-main">
     <h1>
-        Doremon View counter
+        Doremon View Counter
     </h1>
 
     <div class="changeSettings">
         <form action="" method="POST">
+            <h1>
+                show view count
+            </h1>
             <div>
                 <div>
                     <input type="checkbox" name="handlePagesTitleCheckbox" id="" <?php echo $pagesTitleChecked ?>>
-                    <label for="handlePagesTitleCheckbox">show view count after pages title</label>
+                    <label for="handlePagesTitleCheckbox">after pages title</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="handleShowInHomePage" id="" <?php echo $showInHomePageChecked ?> >
+                    <label for="handleShowInHomePage">allow to show in homepage</label>
                 </div>
                 <div>
                     <input type="checkbox" name="handlePostsTitleCheckbox" id="" <?php echo $postsTitleChecked ?> >
-                    <label for="handlePostsTitleCheckbox">show view count after posts title</label>
+                    <label for="handlePostsTitleCheckbox">after posts title</label>
                 </div>
                 <div>
                     <input type="checkbox" name="handlePagesCheckbox" id="" <?php echo $pagesChecked ?>>
-                    <label for="handlePagesCheckbox">show view count at pages list</label>
+                    <label for="handlePagesCheckbox">pages list (Admin dashboard)</label>
                 </div>
                 <div>
                     <input type="checkbox" name="handlePostsCheckbox" id="" <?php echo $postsChecked ?>>
-                    <label for="handlePostsCheckbox">show view count at posts list</label>
+                    <label for="handlePostsCheckbox">posts list (Admin dashboard)</label>
                 </div>
             </div>
-            <input type="submit" value="Save Changes" name="submit" class="submitChanges">
+            <div class="submitBtnContainer">
+                <input type="submit" value="Save Changes" name="submit" class="submitChanges">
+            </div>
         </form>
     </div>
     
@@ -246,8 +269,8 @@
                     <?php foreach($currentDataPoints as $dataPoint):
                         $date = date('Y-m-d', $dataPoint['x'] / 1000);?>
                         <tr>
-                            <td><?= htmlspecialchars($date) ?></td>
-                            <td><?= htmlspecialchars(is_array($dataPoint['y']) ? implode(", ", $dataPoint['y']) : $dataPoint['y']) ?></td>
+                            <td><?= $date?></td>
+                            <td><?= is_array($dataPoint['y']) ? implode(", ", $dataPoint['y']) : $dataPoint['y']?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
