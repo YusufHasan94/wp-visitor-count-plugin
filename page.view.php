@@ -15,7 +15,11 @@
 
     $sortedDataPoints = $dataPoints; 
 
-
+    $itemsPerPage = 5;
+    $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+    $totalPages = ceil(count($sortedDataPoints)/$itemsPerPage);
+    $startIndex = ($page-1) * $itemsPerPage;
+    $currentDataPoints = array_slice($sortedDataPoints, $startIndex, $itemsPerPage);
 
 ?>
 <style>
@@ -74,6 +78,16 @@
     }
     .doremon-counter-table-container tr{
         text-align: center;
+    }
+    .doremon-counter-table-container .pagination{
+        width: 100%;
+        margin-top: 10px;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .doremon-counter-table-container .pagination form button{
+        font-size: 20px;
+        border-radius: 5px;
     }
     #chartContainer{
         margin: 50px 0 0 10px;
@@ -152,6 +166,31 @@
     <h1>
         Doremon View counter
     </h1>
+
+    <div class="changeSettings">
+        <form action="" method="POST">
+            <div>
+                <div>
+                    <input type="checkbox" name="handlePagesTitleCheckbox" id="" <?php echo $pagesTitleChecked ?>>
+                    <label for="handlePagesTitleCheckbox">show view count after pages title</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="handlePostsTitleCheckbox" id="" <?php echo $postsTitleChecked ?> >
+                    <label for="handlePostsTitleCheckbox">show view count after posts title</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="handlePagesCheckbox" id="" <?php echo $pagesChecked ?>>
+                    <label for="handlePagesCheckbox">show view count at pages list</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="handlePostsCheckbox" id="" <?php echo $postsChecked ?>>
+                    <label for="handlePostsCheckbox">show view count at posts list</label>
+                </div>
+            </div>
+            <input type="submit" value="Save Changes" name="submit" class="submitChanges">
+        </form>
+    </div>
+    
     <div class="doremon-counter-main-container">
         <div class="doremon-counter-label-container">
             <div class="doremon-counter-container doremon-counter-today-visitor">
@@ -204,50 +243,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($sortedDataPoints as $dataPoint):
+                    <?php foreach($currentDataPoints as $dataPoint):
                         $date = date('Y-m-d', $dataPoint['x'] / 1000);?>
                         <tr>
-                            <td><?=$date?></td>
-                            <td>
-                                <?php
-                                    if(is_array($dataPoint['y'])){
-                                        $dataPoint['y'] = implode(", ", $dataPoint['y']);
-                                        echo $dataPoint['y'];
-                                    }
-                                    else{
-                                        echo $dataPoint['y'];
-                                    }
-                                ?>
-                            </td>
+                            <td><?= htmlspecialchars($date) ?></td>
+                            <td><?= htmlspecialchars(is_array($dataPoint['y']) ? implode(", ", $dataPoint['y']) : $dataPoint['y']) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            <div class="pagination">
+                <form method="POST">
+                    <button type="submit" name="page" class="prev-btn" value="<?= $page - 1?>" <?= ($page == 1)? "disabled":"" ?>>&#10508;</button>
+                    <button type="submit" name="page" class="next-btn" value="<?= $page + 1 ?>" <?= ($page == $totalPages)? "disabled":"" ?>>&#10509;</button>
+                </form>
+            </div>
         </div>
     </div>
     <div id="chartContainer"></div>
-    <div class="changeSettings">
-        <form action="" method="POST">
-            <div>
-                <div>
-                    <input type="checkbox" name="handlePagesTitleCheckbox" id="" <?php echo $pagesTitleChecked ?>>
-                    <label for="handlePagesTitleCheckbox">show view count after pages title</label>
-                </div>
-                <div>
-                    <input type="checkbox" name="handlePostsTitleCheckbox" id="" <?php echo $postsTitleChecked ?> >
-                    <label for="handlePostsTitleCheckbox">show view count after posts title</label>
-                </div>
-                <div>
-                    <input type="checkbox" name="handlePagesCheckbox" id="" <?php echo $pagesChecked ?>>
-                    <label for="handlePagesCheckbox">show view count at pages list</label>
-                </div>
-                <div>
-                    <input type="checkbox" name="handlePostsCheckbox" id="" <?php echo $postsChecked ?>>
-                    <label for="handlePostsCheckbox">show view count at posts list</label>
-                </div>
-            </div>
-            <input type="submit" value="Save Changes" name="submit" class="submitChanges">
-        </form>
-    </div>
+    
 </div>
 <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>

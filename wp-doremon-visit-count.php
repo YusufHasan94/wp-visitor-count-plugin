@@ -12,7 +12,6 @@ class DoremonviewCount{
         add_action('wp', array($this, 'track_page_view'));
         add_action( 'admin_menu', array($this, 'add_view_menu_page'));
         add_action('init', array($this, 'handle_settings_changes'));
-        // add_filter('the_title', array($this, 'display_view_count_with_title'), 10, 2);
     }
 
     public function handle_settings_changes() {
@@ -71,6 +70,7 @@ class DoremonviewCount{
             update_option('daily_visitor_counts', $dailyCounts);
         }
     }
+
     // display view count
     public function get_total_view_count() {
         $count = get_option( 'visitor_count', 0 );
@@ -217,7 +217,6 @@ class DoremonviewCount{
     }  
 
     //handle settings changes
-
     public function save_settings_changes() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['submit'])) {
