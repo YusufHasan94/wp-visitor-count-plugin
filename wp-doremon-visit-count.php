@@ -192,26 +192,35 @@ class DoremonviewCount{
         if(is_singular()){
             global $post;
             $post_id = $post->ID;
-            $count = get_post_meta($post_id, 'page_visits', true); 
-            $count = (int)$count;
-            if($count){
-                $count++;
-                update_post_meta($post_id, 'page_visits', $count);
-            }else{
-                add_post_meta($post_id, 'page_visits', 1, true);
-            }
-
-            $gmt_offset = 6;
-            $current_time = current_time('timestamp');
-            $adjusted_time = gmdate('Y-m-d H:i:s', $current_time + ($gmt_offset * 3600));
+            $cookie_name = 'doremon_viewed_'. $post_id;
             
-            $recent_views = get_option('recent_view_activities', array());
-            $recent_views[] = array(
-                'post_id'=> $post_id, 
-                'view_time' => $adjusted_time,
-                'view_count' => $count,
-            );
-            update_option('recent_view_activities', $recent_views);
+            if(!isset($_COOKIE[$cookie_name])){
+                setcookie($cookie_name, uniqid(), time()+(86400*30));
+                $unique_id = uniqid();
+                $count = get_post_meta($post_id, 'page_visits', true); 
+                $count = (int)$count;
+                if($count){
+                    $count++;
+                    update_post_meta($post_id, 'page_visits', $count);
+                }else{
+                    add_post_meta($post_id, 'page_visits', 1, true);
+                }
+                $gmt_offset = 6;
+                $current_time = current_time('timestamp');
+                $adjusted_time = gmdate('Y-m-d H:i:s', $current_time + ($gmt_offset * 3600));
+                
+                $recent_views = get_option('recent_view_activities', array());
+                $recent_views[] = array(
+                    'post_id'=> $post_id, 
+                    'user_id' => $unique_id,
+                    'view_time' => $adjusted_time,
+                    'view_count' => $count,
+                );
+                update_option('recent_view_activities', $recent_views);
+            }
+            
+            $this->increment_view_count();
+
         }
     }
 
