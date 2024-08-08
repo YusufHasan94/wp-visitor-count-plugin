@@ -283,6 +283,24 @@ class DoremonviewCount{
             array($this,'display_singular_view_page'),                    // Callback function to display page content
         );
     }
+
+    // identify which user is login
+    public function view_all_users(){
+        $current_user = wp_get_current_user();
+        $users = get_users();
+        if(!empty($users)){
+            foreach($users as $user){
+                $roles = implode( ', ', $user->roles );                            
+                $is_checked = ( $current_user->ID === $user->ID ) ? 'checked' : '';
+                echo '<div>';
+                echo '<input type="checkbox" name="' . esc_attr( $user->user_login ) . '" id="' . esc_attr( $user->user_login ) .  '" '. $is_checked .'>';
+                echo '<label for="' . esc_attr( $user->user_login ) . '">'.esc_html( $user->user_login ) ." (". esc_html( $roles ) .")". '</label>';
+                echo '</div>';
+            }
+        }
+    }
+
+
 }
 
 $doremonview = new DoremonviewCount();

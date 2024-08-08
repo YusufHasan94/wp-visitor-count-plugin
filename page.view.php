@@ -100,6 +100,7 @@
         margin: 20px 0 20px 20px; 
         display: flex; 
         justify-content: end;
+        gap: 30px;
     }
     .changeSettings form{
         display: flex;
@@ -137,12 +138,20 @@
         align-items: flex-end;
         margin-top: 10px;
     }
-    .submitChanges{
+    .submitChanges, .userListSettings .submitBtn{
         width: fit-content;
         background-color: #29527B;
         color: white;
         padding: 4px;
         border-radius: 5px; 
+    }
+    .userListSettings{
+        position: relative;
+    }
+    .userListSettings .submitBtn{
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
     }
 </style>
 
@@ -180,7 +189,6 @@
     <h1>
         Doremon View Counter
     </h1>
-
     <div class="changeSettings">
         <form action="" method="POST">
             <h1>
@@ -212,6 +220,19 @@
                 <input type="submit" value="Save Changes" name="submit" class="submitChanges">
             </div>
         </form>
+        <form action="" method="POST" class="userListSettings">
+            <h1>
+                User List
+            </h1>
+            <div>
+                <?php $this->view_all_users(); ?>
+                <div class="">
+                    <input type="submit" value="save changes" class="submitBtn">
+                </div>
+            </div>
+        </form>
+
+        
     </div>
     
     <div class="doremon-counter-main-container">
