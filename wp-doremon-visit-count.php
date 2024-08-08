@@ -146,17 +146,21 @@ class DoremonviewCount{
     //counting & display view starts here
     public function increment_view_count() {
         if (! is_admin() ) {
-            $count = get_option( 'visitor_count', 0 );
-            update_option( 'visitor_count', ++$count );
- 
-            $today = date('Y-m-d');
-            $dailyCounts = get_option('daily_visitor_counts', array());
-            if(isset($dailyCounts[$today])){
-               $dailyCounts[$today]++;
-            }else{
-                $dailyCounts[$today] = 1;
+            $cookie_name = "doremon_viewed_";
+            setcookie($cookie_name, uniqid(), time()+(86400*30));
+            if(!isset($_COOKIE[$cookie_name])){
+                $count = get_option( 'visitor_count', 0 );
+                update_option( 'visitor_count', ++$count );
+     
+                $today = date('Y-m-d');
+                $dailyCounts = get_option('daily_visitor_counts', array());
+                if(isset($dailyCounts[$today])){
+                   $dailyCounts[$today]++;
+                }else{
+                    $dailyCounts[$today] = 1;
+                }
+                update_option('daily_visitor_counts', $dailyCounts);
             }
-            update_option('daily_visitor_counts', $dailyCounts);
         }
     }
 
