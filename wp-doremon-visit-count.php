@@ -114,7 +114,7 @@ class DoremonviewCount{
     public function populate_viewcount_page_column($column,$post_id){
         if($column == 'visitor_count'){
             $count = get_post_meta($post_id, 'page_visits', true);
-            echo $count?$count:0;
+            echo esc_html($count?$count:0);
         }
     }
     
@@ -126,7 +126,7 @@ class DoremonviewCount{
     public function populate_viewcount_post_column($column, $post_id){
         if($column == 'visitor_count'){
             $count = get_post_meta($post_id, 'page_visits', true);
-            echo $count? $count:0;
+            echo esc_html($count? $count:0);
         }
     }  
 
@@ -200,6 +200,18 @@ class DoremonviewCount{
             }else{
                 add_post_meta($post_id, 'page_visits', 1, true);
             }
+
+            $gmt_offset = 6;
+            $current_time = current_time('timestamp');
+            $adjusted_time = gmdate('Y-m-d H:i:s', $current_time + ($gmt_offset * 3600));
+            
+            $recent_views = get_option('recent_view_activities', array());
+            $recent_views[] = array(
+                'post_id'=> $post_id, 
+                'view_time' => $adjusted_time,
+                'view_count' => $count,
+            );
+            update_option('recent_view_activities', $recent_views);
         }
     }
 
@@ -262,6 +274,11 @@ class DoremonviewCount{
     public function display_singular_view_page() {
         require "singlepage.view.php";
     }
+
+    // recent activity
+    public function recent_activity(){
+        require 'activity.view.php';
+    }
     
     // add menu page
     public function add_view_menu_page() {
@@ -276,29 +293,16 @@ class DoremonviewCount{
         );
         add_submenu_page(
             'doremon_view_count_menu',                                    // parent slug
-            __('Single Page View', 'doremon-view-count'),                 // Page title
-            __('Single Page View', 'doremon-view-count'),                 // Menu title
+            __('Recent Activity', 'doremon-view-count'),                 // Page title
+            __('Recent Activity', 'doremon-view-count'),                 // Menu title
             'manage_options',                                             // Capability required to access
-            'single_page_view',                                           // Menu slug
-            array($this,'display_singular_view_page'),                    // Callback function to display page content
+            'recent_activity',                                           // Menu slug
+            array($this,'recent_activity'),                    // Callback function to display page content
         );
-    }
+    }  
+     
+    
 
-    // identify which user is login
-    public function view_all_users(){
-        $current_user = wp_get_current_user();
-        $users = get_users();
-        if(!empty($users)){
-            foreach($users as $user){
-                $roles = implode( ', ', $user->roles );                            
-                $is_checked = ( $current_user->ID === $user->ID ) ? 'checked' : '';
-                echo '<div>';
-                echo '<input type="checkbox" name="' . esc_attr( $user->user_login ) . '" id="' . esc_attr( $user->user_login ) .  '" '. $is_checked .'>';
-                echo '<label for="' . esc_attr( $user->user_login ) . '">'.esc_html( $user->user_login ) ." (". esc_html( $roles ) .")". '</label>';
-                echo '</div>';
-            }
-        }
-    }
 
 
 }

@@ -138,20 +138,12 @@
         align-items: flex-end;
         margin-top: 10px;
     }
-    .submitChanges, .userListSettings .submitBtn{
+    .submitChanges{
         width: fit-content;
         background-color: #29527B;
         color: white;
         padding: 4px;
         border-radius: 5px; 
-    }
-    .userListSettings{
-        position: relative;
-    }
-    .userListSettings .submitBtn{
-        position: absolute;
-        bottom: 15px;
-        right: 15px;
     }
 </style>
 
@@ -219,20 +211,7 @@
             <div class="submitBtnContainer">
                 <input type="submit" value="Save Changes" name="submit" class="submitChanges">
             </div>
-        </form>
-        <form action="" method="POST" class="userListSettings">
-            <h1>
-                User List
-            </h1>
-            <div>
-                <?php $this->view_all_users(); ?>
-                <div class="">
-                    <input type="submit" value="save changes" class="submitBtn">
-                </div>
-            </div>
-        </form>
-
-        
+        </form>        
     </div>
     
     <div class="doremon-counter-main-container">
