@@ -150,7 +150,8 @@ class DoremonviewCount{
             setcookie($cookie_name, uniqid(), time()+(86400*30));
             if(!isset($_COOKIE[$cookie_name])){
                 $count = get_option( 'visitor_count', 0 );
-                update_option( 'visitor_count', ++$count );
+                $count++;
+                update_option( 'visitor_count', $count);
      
                 $today = date('Y-m-d');
                 $dailyCounts = get_option('daily_visitor_counts', array());
@@ -222,9 +223,6 @@ class DoremonviewCount{
                 );
                 update_option('recent_view_activities', $recent_views);
             }
-            
-            $this->increment_view_count();
-
         }
     }
 
