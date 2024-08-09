@@ -12,8 +12,12 @@ class DoremonviewCount{
         add_action('wp', array($this, 'track_page_view'));
         add_action( 'admin_menu', array($this, 'add_view_menu_page'));
         add_action('init', array($this, 'handle_settings_changes'));
+        add_action('admin_enqueue_scripts', array($this, 'handle_external_files'));
     }
 
+    public function handle_external_files(){
+        wp_enqueue_style('doremon-view-count', plugin_dir_url(__FILE__)."css/style.css");
+    }
 
     // show view count settings part start here
     public function handle_settings_changes() {
@@ -311,11 +315,6 @@ class DoremonviewCount{
             array($this,'recent_activity'),                    // Callback function to display page content
         );
     }  
-     
-    
-
-
-
 }
 
 $doremonview = new DoremonviewCount();

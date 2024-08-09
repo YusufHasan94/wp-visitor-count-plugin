@@ -5,7 +5,7 @@
     $recent_views = get_option('recent_view_activities', array());
 
     if (!empty($recent_views)) {
-        echo '<table class="widefat fixed">';
+        echo '<table class="widefat fixed activity_table">';
         echo '<thead><tr><th>Unique Id</th><th>Title</th><th>View Time</th><th>View Count</th></tr></thead>';
         echo '<tbody>';
 
