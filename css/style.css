@@ -42,12 +42,12 @@
 } .doremon-counter-table-container h1{
     text-transform: capitalize;
 }
-.doremon-counter-table-container table{
+.doremon-counter-table-container .view-count-table{
     width: 100%; 
     font-size: 22px;
     border-collapse: collapse;
 }
-.doremon-counter-table-container table, tr, th, td{
+.doremon-counter-table-container .view-count-table tr, th, td{
     border: 1px solid black;
     padding: 5px;
 }
@@ -124,14 +124,6 @@
 .singlepage-main-container{
     margin: 50px 50px 50px 10px;
 }
-table, td, th{
-    border: 1px solid black;
-}
-th, td{
-    font-size: 18px;
-    padding: 4px;
-}
-
 .activity_table th{
     border: none!important;
     border-bottom: 0.1px solid #00000050!important;

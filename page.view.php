@@ -134,7 +134,7 @@
         </div>
         <div class="doremon-counter-table-container">
             <h1>Website View Table</h1>
-            <table>
+            <table class="view-count-table">
                 <thead>
                     <tr>
                         <th>Date</th>
