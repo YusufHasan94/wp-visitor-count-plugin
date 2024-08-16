@@ -47,9 +47,11 @@
     font-size: 22px;
     border-collapse: collapse;
 }
-.doremon-counter-table-container .view-count-table tr, th, td{
+.doremon-counter-table-container .view-count-table tr, 
+.doremon-counter-table-container .view-count-table th, 
+.doremon-counter-table-container .view-count-table td{
     border: 1px solid black;
-    padding: 5px;
+
 }
 .doremon-counter-table-container tr{
     text-align: center;
