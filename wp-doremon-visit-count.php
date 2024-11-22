@@ -8,15 +8,32 @@ Author: Yusuf
 
 class DoremonviewCount{
     public function __construct(){
-        add_action( 'wp', array($this, 'increment_view_count'));
+        add_action('wp', array($this, 'increment_view_count'));
         add_action('wp', array($this, 'track_page_view'));
-        add_action( 'admin_menu', array($this, 'add_view_menu_page'));
+        add_action('admin_menu', array($this, 'add_view_menu_page'));
         add_action('init', array($this, 'handle_settings_changes'));
         add_action('admin_enqueue_scripts', array($this, 'handle_external_files'));
-        // add_shortcode('view_count', array($this, 'view_count_shortcode'));
         add_shortcode('view_count', array($this, 'view_count_shortcode'));
     }
+    //fetch ip address and location
+    private function get_ip_geolocation(){
+        $url = "http://ip-api.com/json";
+        $response = wp_remote_get($url);
+        if(is_wp_error($response)){
+            return false;
+        }
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body, true);
+        if($data && isset($data['status']) && $data['status']==='fail'){ 
+            return false;
+        }
+        $ip = isset($data['query'])? $data['query'] : 'Unknown IP';
+        $city = isset($data['city'])? $data['city'] : 'Unknown city';
+        $country = isset($data['country'])? $data['country'] : 'Unknown country';
 
+        return array('ip' => $ip, 'city' => $city, 'country' => $country);
+    }
+    //implement shortcode
     public function view_count_shortcode($atts){
         global $post;
         $atts = shortcode_atts(array(
@@ -231,6 +248,15 @@ class DoremonviewCount{
                 }else{
                     add_post_meta($post_id, 'page_visits', 1, true);
                 }
+                
+                $geolocation = $this->get_ip_geolocation();
+                
+                if($geolocation){
+                    update_post_meta($post_id, 'visitor_ip', $geolocation['ip']);
+                    update_post_meta($post_id, 'visitor_city', $geolocation['city']);
+                    update_post_meta($post_id, 'visitor_country', $geolocation['country']);
+                }
+
                 $gmt_offset = 6;
                 $current_time = current_time('timestamp');
                 $adjusted_time = gmdate('Y-m-d H:i:s', $current_time + ($gmt_offset * 3600));
@@ -239,6 +265,9 @@ class DoremonviewCount{
                 $recent_views[] = array(
                     'post_id'=> $post_id, 
                     'user_id' => $unique_id,
+                    'ip_address'=> $geolocation['ip'],
+                    'city' => $geolocation['city'],
+                    'country' => $geolocation['country'],
                     'view_time' => $adjusted_time,
                     'view_count' => $count,
                 );
