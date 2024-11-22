@@ -55,7 +55,7 @@
 
 <div class="doremon-page-view-counter-main">
     <h1>
-        Doremon View Counter
+        Doremon View Count
     </h1>
     <div class="changeSettings">
         <form action="" method="POST">

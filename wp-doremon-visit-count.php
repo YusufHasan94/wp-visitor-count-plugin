@@ -13,6 +13,23 @@ class DoremonviewCount{
         add_action( 'admin_menu', array($this, 'add_view_menu_page'));
         add_action('init', array($this, 'handle_settings_changes'));
         add_action('admin_enqueue_scripts', array($this, 'handle_external_files'));
+        // add_shortcode('view_count', array($this, 'view_count_shortcode'));
+        add_shortcode('view_count', array($this, 'view_count_shortcode'));
+    }
+
+    public function view_count_shortcode($atts){
+        global $post;
+        $atts = shortcode_atts(array(
+            'prefix' => '',
+            'suffix' => ''
+        ), $atts);
+        if(isset($post->ID)){
+            $view_count = get_post_meta($post->ID, 'page_visits', true);
+            $view_count = $view_count? $view_count : 0;
+
+            return $atts['prefix'].$view_count.' '.$atts['suffix'];
+        }
+        return '';
     }
 
     public function handle_external_files(){
@@ -304,15 +321,15 @@ class DoremonviewCount{
             'doremon_view_count_menu',                                   // Menu slug
             array($this,'display_view_general_page'),                    // Callback function to display page content
             'dashicons-chart-bar',                                       // Icon (optional)
-            4                                                            //priority    
+            4                                                            // priority    
         );
         add_submenu_page(
-            'doremon_view_count_menu',                                    // parent slug
+            'doremon_view_count_menu',                                   // parent slug
             __('Recent Activity', 'doremon-view-count'),                 // Page title
             __('Recent Activity', 'doremon-view-count'),                 // Menu title
-            'manage_options',                                             // Capability required to access
+            'manage_options',                                            // Capability required to access
             'recent_activity',                                           // Menu slug
-            array($this,'recent_activity'),                    // Callback function to display page content
+            array($this,'recent_activity'),                              // Callback function to display page content
         );
     }  
 }
