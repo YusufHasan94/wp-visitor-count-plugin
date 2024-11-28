@@ -4,10 +4,6 @@
 <?php
     $recent_views = get_option('recent_view_activities', array());
     
-    foreach($recent_views as $data){
-        echo $data['country']."<br>";
-    }
-
     $itemsPerPage = 15;
     $page = isset(($_POST['page']))?(int)$_POST['page']:1;
     $totalPages = ceil(count($recent_views)/$itemsPerPage);
