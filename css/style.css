@@ -65,6 +65,7 @@
 .doremon-counter-table-container .pagination form button{
     font-size: 20px;
     border-radius: 5px;
+    cursor: pointer;
 }
 #chartContainer{
     margin: 50px 0 0 10px;

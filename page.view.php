@@ -153,8 +153,8 @@
             </table>
             <div class="pagination">
                 <form method="POST">
-                    <button type="submit" name="page" class="prev-btn" value="<?= $page - 1?>" <?= ($page == 1)? "disabled":"" ?>>&#10508;</button>
-                    <button type="submit" name="page" class="next-btn" value="<?= $page + 1 ?>" <?= ($page == $totalPages)? "disabled":"" ?>>&#10509;</button>
+                    <button type="submit" name="page" class="prev-btn" style="cursor: pointer;" value="<?= $page - 1?>" <?= ($page == 1)? "disabled":"" ?>>&#10508;</button>
+                    <button type="submit" name="page" class="next-btn" style="cursor: pointer;" value="<?= $page + 1 ?>" <?= ($page == $totalPages)? "disabled":"" ?>>&#10509;</button>
                 </form>
             </div>
         </div>

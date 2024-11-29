@@ -8,22 +8,22 @@
     $page = isset(($_POST['page']))?(int)$_POST['page']:1;
     $totalPages = ceil(count($recent_views)/$itemsPerPage);
     $startIndex = ($page-1)*$itemsPerPage;
-    $currentPageData = array_slice($recent_views, $startIndex, $itemsPerPage);
+    $updatedPageData = array_reverse($recent_views);
+    $currentPageData = array_slice($updatedPageData, $startIndex, $itemsPerPage);
 
     
 
     if (!empty($currentPageData)) {
         echo '<table class="widefat fixed activity_table">';
-        echo '<thead><tr><th>Unique Id</th><th>IP Address</th><th>Location</th><th>Title</th><th>View Time</th><th>View Count</th></tr></thead>';
+        echo '<thead><tr><th>View Time</th><th>IP Address</th><th>Location</th><th>Page Title</th><th>View Count</th></tr></thead>';
         echo '<tbody>';
 
         foreach ($currentPageData as $view) {
             echo '<tr>';
-            echo '<td>' . (isset($view['user_id']) ? esc_html($view['user_id']) : 'N/A') . '</td>';
+            echo '<td>' . esc_html($view['view_time']) . '</td>';
             echo '<td>' . esc_html($view['ip_address']) . '</td>';
             echo '<td>' . esc_html($view['city']) . ' ' . esc_html($view['country'])  . '</td>';
             echo '<td>' . esc_html(get_the_title($view['post_id'])) . '</td>';
-            echo '<td>' . esc_html($view['view_time']) . '</td>';
             echo '<td>' . esc_html($view['view_count']) . '</td>';
             echo '</tr>';
         }
@@ -33,8 +33,8 @@
         ?>
             <form method="POST" style="margin-top: 20px; display: flex; justify-content: flex-end;">
                 <div>
-                    <button type="submit" name="page" class="prev-btn" value="<?= $page - 1?>" <?= ($page == 1)? "disabled":"" ?>>&#10508;</button>
-                    <button type="submit" name="page" class="next-btn" value="<?= $page + 1 ?>" <?= ($page == $totalPages)? "disabled":"" ?>>&#10509;</button>
+                    <button type="submit" name="page" class="prev-btn" style="cursor: pointer;" value="<?= $page - 1?>" <?= ($page == 1)? "disabled":"" ?>>&#10508;</button>
+                    <button type="submit" name="page" class="next-btn" style="cursor: pointer;" value="<?= $page + 1 ?>" <?= ($page == $totalPages)? "disabled":"" ?>>&#10509;</button>
                 </div>
             </form>
         <?php
