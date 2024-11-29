@@ -236,10 +236,8 @@ class DoremonviewCount{
             global $post;
             $post_id = $post->ID;
             $cookie_name = 'doremon_viewed_'. $post_id;
-            
             if(!isset($_COOKIE[$cookie_name])){
                 setcookie($cookie_name, uniqid(), time()+(86400*30));
-                $unique_id = uniqid();
                 $count = get_post_meta($post_id, 'page_visits', true); 
                 $count = (int)$count;
                 if($count){
@@ -264,7 +262,6 @@ class DoremonviewCount{
                 $recent_views = get_option('recent_view_activities', array());
                 $recent_views[] = array(
                     'post_id'=> $post_id, 
-                    'user_id' => $unique_id,
                     'ip_address'=> $geolocation['ip'],
                     'city' => $geolocation['city'],
                     'country' => $geolocation['country'],
