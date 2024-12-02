@@ -15,6 +15,8 @@ class DoremonviewCount{
         add_action('admin_enqueue_scripts', array($this, 'handle_external_files'));
         add_shortcode('view_count', array($this, 'view_count_shortcode'));
     }
+
+
     //fetch ip address and location
     private function get_ip_geolocation(){
         $url = "http://ip-api.com/json";

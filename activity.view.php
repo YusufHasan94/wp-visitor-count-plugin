@@ -11,7 +11,19 @@
     $updatedPageData = array_reverse($recent_views);
     $currentPageData = array_slice($updatedPageData, $startIndex, $itemsPerPage);
 
-    
+
+    if (isset($_SERVER['HTTP_USER_AGENT'])) {
+        // echo 'User Agent: ' . htmlspecialchars($_SERVER['HTTP_USER_AGENT']) . '<br>';
+    } else {
+        echo 'No User Agent information available.';
+    }    
+
+    if(isset($_SERVER['REMOTE_ADDR'])){
+        // echo 'ip address: '. htmlspecialchars($_SERVER['REMOTE_ADDR']) . '<br>';
+    }else{
+        echo 'not found';
+    }
+
 
     if (!empty($currentPageData)) {
         echo '<table class="widefat fixed activity_table">';
@@ -21,7 +33,7 @@
         foreach ($currentPageData as $view) {
             echo '<tr>';
             echo '<td>' . esc_html($view['view_time']) . '</td>';
-            echo '<td>' . esc_html($view['ip_address']) . '</td>';
+            echo '<td>' . htmlspecialchars($_SERVER['REMOTE_ADDR']) . '</td>';
             echo '<td>' . esc_html($view['city']) . ' ' . esc_html($view['country'])  . '</td>';
             echo '<td>' . esc_html(get_the_title($view['post_id'])) . '</td>';
             echo '<td>' . esc_html($view['view_count']) . '</td>';
